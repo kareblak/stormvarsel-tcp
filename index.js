@@ -1,8 +1,8 @@
-var net = require('net');
-var request = require('request');
-var xml2js = require('xml2js');
+const net = require('net');
+const request = require('request');
+const xml2js = require('xml2js');
 
-var yrUrl = 'http://www.yr.no/place/Norway/Møre_og_Romsdal/Kristiansund/Kristiansund/forecast.xml'
+const yrUrl = process.env.YRKSU || 'http://www.yr.no/place/Norway/Møre_og_Romsdal/Kristiansund/Kristiansund/forecast.xml';
 
 function parseWind(xml, cb) {
 	xml2js.parseString(xml, function(err, res) {
@@ -12,9 +12,9 @@ function parseWind(xml, cb) {
 			return;
 		}
 		try {
-			var next = res.weatherdata.forecast[0].tabular[0].time[10];
-			var deg = next.windDirection[0].$.deg;
-			var mps = next.windSpeed[0].$.mps;
+			const next = res.weatherdata.forecast[0].tabular[0].time[10];
+			const deg = next.windDirection[0].$.deg;
+			const mps = next.windSpeed[0].$.mps;
 			cb(mps + "@" + deg);
 		} catch(e) {
 			console.log(e)
@@ -40,8 +40,8 @@ function responder(socket) {
 	};
 }
 
-var server = net.createServer(function(socket) {
+const server = net.createServer(function(socket) {
 	tcpResponse(responder(socket));
 });
 
-server.listen((process.env.PORT || 1337), '127.0.0.1');
+server.listen((process.env.PORT || 7155), '127.0.0.1');
