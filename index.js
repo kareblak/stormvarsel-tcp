@@ -44,4 +44,4 @@ var server = net.createServer(function(socket) {
 	tcpResponse(responder(socket));
 });
 
-server.listen(1337, '127.0.0.1');
+server.listen((process.env.PORT || 1337), '127.0.0.1');
